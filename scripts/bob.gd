@@ -1,57 +1,26 @@
 extends CharacterBody2D
 
-const moveSpeed = 50
-const maxSpeed = 100
+const ACCELERATION = 500
+const MAX_SPEED = 80
+const FRICTION = 500
 
-const jumpHeight = -300.0
-const counterDashCooldown = 1
-
-var gravity = 15
-
-@export var can_dash: bool
-var dash : bool
-
-@onready var sprite = $Sprite2D
 @onready var animationPlayer = $AnimationPlayer
-
-var timer = 1
-
-var motion = Vector2()
+@onready var animationTree = $AnimationTree
+@onready var animationState = animationTree.get("parameters/playback")
 
 func _physics_process(_delta):
-	velocity.y += gravity
-	var friction = false
-
-	if Input.is_action_pressed("move_right"):
-		sprite.flip_h = true
-		animationPlayer.play("Walk")
-		velocity.x = min(velocity.x + moveSpeed, maxSpeed)
-
-	elif Input.is_action_pressed("move_left"):
-		sprite.flip_h = false
-		animationPlayer.play("Walk")
-		velocity.x = max(velocity.x - moveSpeed, -maxSpeed)
-		
+	var input_vector = Vector2.ZERO
+	input_vector.x = Input.get_action_strength("move_right") - Input.get_action_strength("move_left")
+	input_vector.y = Input.get_action_strength("move_down") - Input.get_action_strength("move_up")
+	input_vector = input_vector.normalized()
+	
+	if input_vector != Vector2.ZERO:
+		animationTree.set("parameters/Idle/blend_position", input_vector)
+		animationTree.set("parameters/walk/blend_position", input_vector)
+		animationState.travel("walk")
+		velocity = velocity.move_toward(input_vector * MAX_SPEED, ACCELERATION * _delta)
 	else:
-		animationPlayer.play("Idle")
-		friction = true
-		
-	if Input.is_action_pressed("move_dash"):
-			dash_timer()
-			
-	if is_on_floor():
-		if Input.is_action_pressed("move_up"):
-			velocity.y = jumpHeight
-		if friction:
-			velocity.x = lerp(velocity.x, 0.0, 0.5)
-	else:
-		if friction:
-			velocity.x = lerp(velocity.x, 0.0, 0.01)
-			
+		animationState.travel("Idle")
+		velocity = velocity.move_toward(Vector2.ZERO, FRICTION * _delta)
+	
 	move_and_slide()
-
-func dash_timer():
-	if sprite.flip_h == true:
-		velocity.x = max(velocity.x , maxSpeed * 3)
-	elif sprite.flip_h == false:
-		velocity.x = min(velocity.x , -(maxSpeed * 3))
