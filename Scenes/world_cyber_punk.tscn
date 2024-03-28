@@ -1,10 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://2xd7ykks1sv6"]
+[gd_scene load_steps=14 format=3 uid="uid://2xd7ykks1sv6"]
 
 [ext_resource type="Texture2D" uid="uid://bi4543ydyeyed" path="res://World/GrassBackground.png" id="1_vmvis"]
 [ext_resource type="PackedScene" uid="uid://bevoi4y6qk6hv" path="res://Scenes/mercenary_1_animation.tscn" id="2_ilpaj"]
 [ext_resource type="Texture2D" uid="uid://cmtee1033wxlf" path="res://World/DirtTileset.png" id="2_mxwvd"]
 [ext_resource type="Texture2D" uid="uid://dhhu4wo4rmjdb" path="res://World/Bush.png" id="3_orbfa"]
 [ext_resource type="Texture2D" uid="uid://bs8mqkdyfjlkg" path="res://World/CliffTileset.png" id="3_xrr7a"]
+[ext_resource type="PackedScene" uid="uid://do1i8kusba58y" path="res://Scenes/bat.tscn" id="5_sgq7r"]
 [ext_resource type="Texture2D" uid="uid://roxmub3m7iaq" path="res://World/Grass.png" id="6_34xr7"]
 
 [sub_resource type="GDScript" id="GDScript_ixvgw"]
@@ -2159,6 +2160,18 @@ texture = ExtResource("3_orbfa")
 position = Vector2(0, 6)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_5ih45")
+
+[node name="Bat4" parent="Node" instance=ExtResource("5_sgq7r")]
+position = Vector2(105, 61)
+
+[node name="Bat3" parent="Node" instance=ExtResource("5_sgq7r")]
+position = Vector2(135, 62)
+
+[node name="Bat" parent="Node" instance=ExtResource("5_sgq7r")]
+position = Vector2(80, 49)
+
+[node name="Bat2" parent="Node" instance=ExtResource("5_sgq7r")]
+position = Vector2(102, 106)
 
 [node name="CharacterBody2D" parent="Node" instance=ExtResource("2_ilpaj")]
 position = Vector2(57, 68)
